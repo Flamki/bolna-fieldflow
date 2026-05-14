@@ -1,4 +1,4 @@
-# Bolna Voice AI Agent Prompt
+# Bolna Voice Agent Prompt
 
 ## Agent Name
 
@@ -64,4 +64,3 @@ https://your-public-url/api/bolna/webhook
 ```
 
 For local testing, expose the backend with ngrok or a deployed URL and set `PUBLIC_BASE_URL` in `.env`.
-

@@ -211,7 +211,7 @@ function slideBase(bg = colors.paper) {
     breakLine: false,
     fit: "shrink"
   });
-  slide.addText("AI voice-assisted enterprise service qualification using Bolna", {
+  slide.addText("Bolna-powered enterprise service qualification", {
     x: 0.64,
     y: 2.55,
     w: 6.6,
@@ -390,8 +390,7 @@ function slideBase(bg = colors.paper) {
   const routes = [
     ["POST /api/cases", "Create service case"],
     ["POST /api/cases/:id/call", "Start Bolna call"],
-    ["POST /api/bolna/webhook", "Process execution data"],
-    ["POST /api/demo/webhook/:id", "Demo fallback"]
+    ["POST /api/bolna/webhook", "Process execution data"]
   ];
   routes.forEach(([route, body], i) => {
     slide.addText(route, { x: 0.78, y: 2.0 + i * 0.72, w: 3.2, h: 0.24, fontSize: 11, bold: true, color: colors.green, margin: 0, breakLine: false, fit: "shrink" });
@@ -443,7 +442,7 @@ function slideBase(bg = colors.paper) {
 {
   const slide = slideBase();
   title(slide, "Standout SaaS layer");
-  slide.addText("The assignment flow is packaged as an enterprise operations console, not a one-off call demo.", {
+  slide.addText("The call workflow is packaged as an enterprise operations console, not a one-off integration.", {
     x: 0.58,
     y: 1.18,
     w: 8.8,
@@ -464,7 +463,7 @@ function slideBase(bg = colors.paper) {
     slide.addText(head, { x, y, w: 3.4, h: 0.26, fontSize: 15, bold: true, color: colors.green, margin: 0, fit: "shrink" });
     slide.addText(body, { x, y: y + 0.42, w: 4.85, h: 0.42, fontSize: 12.3, color: colors.dark, margin: 0, fit: "shrink" });
   });
-  slide.addText("This keeps scope tight while showing product, frontend, backend, and AI workflow judgment.", {
+  slide.addText("This keeps scope tight while showing product, frontend, backend, and workflow judgment.", {
     x: 0.72,
     y: 5.85,
     w: 9.6,
@@ -480,7 +479,7 @@ function slideBase(bg = colors.paper) {
 
 {
   const slide = slideBase();
-  title(slide, "Demo flow and links");
+  title(slide, "Workflow flow and links");
   addStage(slide, 1, "Create case", "Dispatcher enters request", 0.72, 1.85, colors.white);
   addStage(slide, 2, "Start call", "Bolna receives context", 3.77, 1.85, colors.white);
   addStage(slide, 3, "Webhook", "Call data posts back", 6.82, 1.85, colors.white);
@@ -489,9 +488,9 @@ function slideBase(bg = colors.paper) {
   slide.addText("https://bolna-one.vercel.app", { x: 2.55, y: 4.18, w: 4.7, h: 0.24, fontSize: 12, color: colors.ink, margin: 0, breakLine: false, fit: "shrink" });
   slide.addText("Webhook", { x: 0.72, y: 4.72, w: 2.2, h: 0.24, fontSize: 12, bold: true, color: colors.green, margin: 0 });
   slide.addText("https://bolna-one.vercel.app/api/bolna/webhook", { x: 2.55, y: 4.72, w: 5.7, h: 0.24, fontSize: 12, color: colors.ink, margin: 0, breakLine: false, fit: "shrink" });
-  slide.addText("Local demo", { x: 0.72, y: 5.26, w: 2.2, h: 0.24, fontSize: 12, bold: true, color: colors.green, margin: 0 });
-  slide.addText("http://localhost:5173?demo=1", { x: 2.55, y: 5.26, w: 4.4, h: 0.24, fontSize: 12, color: colors.ink, margin: 0, breakLine: false, fit: "shrink" });
-  slide.addText("Submission evidence: GitHub repo, deployed link, deck, screen recording, and call/demo recording.", {
+  slide.addText("Repository", { x: 0.72, y: 5.26, w: 2.2, h: 0.24, fontSize: 12, bold: true, color: colors.green, margin: 0 });
+  slide.addText("https://github.com/Flamki/bolna-fieldflow", { x: 2.55, y: 5.26, w: 5.3, h: 0.24, fontSize: 12, color: colors.ink, margin: 0, breakLine: false, fit: "shrink" });
+  slide.addText("Submission evidence: GitHub repo, deployed link, deck, screen recording, and call recording.", {
     x: 0.72,
     y: 6.08,
     w: 9.7,

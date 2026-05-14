@@ -2,7 +2,7 @@
 
 ## 20-second opener
 
-FieldFlow is an AI-powered field-service dispatch workflow built around Bolna. Enterprise service requests usually arrive incomplete, so dispatchers waste time calling customers before they can create a reliable work order. FieldFlow uses a Bolna voice agent to collect the missing operational context, then the backend converts the call result into priority, SLA, technician skill, likely parts, and routing guidance.
+FieldFlow is a Bolna-powered field-service dispatch workflow. Enterprise service requests usually arrive incomplete, so dispatchers waste time calling customers before they can create a reliable work order. FieldFlow uses a Bolna voice agent to collect the missing operational context, then the backend converts the call result into priority, SLA, technician skill, likely parts, and routing guidance.
 
 ## 60-second demo narration
 

@@ -13,7 +13,7 @@ This creates three business problems:
 ## Workflow
 
 1. Dispatcher enters the raw customer request in FieldFlow.
-2. FieldFlow sends the customer and issue context to a Bolna Voice AI agent.
+2. FieldFlow sends the customer and issue context to a Bolna voice agent.
 3. The agent calls the customer and captures:
    - Confirmed issue and symptoms.
    - Business impact.
@@ -39,4 +39,3 @@ Secondary metrics:
 - Percentage of calls with complete triage fields.
 - P1 SLA breach rate.
 - Dispatcher tickets processed per hour.
-

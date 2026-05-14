@@ -20,21 +20,13 @@ Enter:
 
 Click **Create case**.
 
-## 3. Start the Voice AI Call
+## 3. Start the Bolna Call
 
 Click **Start Bolna call**.
 
 Say:
 
-"In live mode, this endpoint sends the call request to Bolna using the agent ID, phone number, and dynamic user data. Without credentials, the app runs in demo mode so the full workflow can still be reviewed."
-
-For a no-risk recording path, open:
-
-```text
-http://localhost:5173?demo=1
-```
-
-This keeps the same UI flow but queues a local demo call instead of placing a real outbound call.
+"This endpoint sends the call request to Bolna using the agent ID, phone number, and dynamic user data. The customer answers the call, the agent collects missing triage details, and Bolna posts the execution result back to the webhook."
 
 ## 4. Show Backend/Webhook Logic
 

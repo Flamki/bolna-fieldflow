@@ -1,6 +1,6 @@
 # Live Bolna Demo Checklist
 
-Use this when recording a real outbound call instead of the demo-safe flow.
+Use this when recording a real outbound call.
 
 ## Before Recording
 
@@ -39,10 +39,4 @@ https://bolna-one.vercel.app/api/bolna/webhook
 
 ## If Live Calling Fails
 
-Use the demo-safe URL:
-
-```text
-https://bolna-one.vercel.app?demo=1
-```
-
-Then click **Start Bolna call** and **Simulate webhook**. This proves the full backend and UI flow without placing a real call.
+Confirm the recipient number is verified in Bolna, the agent ID is correct, and the webhook URL is set to the deployed endpoint above. Then retry the call from a fresh service case.

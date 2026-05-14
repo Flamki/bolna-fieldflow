@@ -1,6 +1,6 @@
 # FieldFlow Voice Triage
 
-FieldFlow is a full-stack Bolna Voice AI workflow built for enterprise field-service triage. A dispatcher creates a service request, the web app starts a Bolna voice call, Bolna sends the call result to a backend webhook, and the backend generates a prioritized technician-ready work order.
+FieldFlow is a full-stack Bolna voice workflow built for enterprise field-service triage. A dispatcher creates a service request, the web app starts a Bolna call, Bolna sends the call result to a backend webhook, and the backend generates a prioritized technician-ready work order.
 
 ## Live Demo
 
@@ -16,18 +16,17 @@ Bolna webhook URL:
 https://bolna-one.vercel.app/api/bolna/webhook
 ```
 
-## Assignment Coverage
+## Product Highlights
 
-| Requirement | Implementation |
+| Area | Implementation |
 | --- | --- |
 | Real enterprise use case | Enterprise field-service request triage for equipment issues |
 | Problem, workflow, metric | Defined in `docs/use-case.md` |
-| Bolna Voice AI agent | Agent prompt and extraction design in `docs/bolna-agent-prompt.md` |
+| Bolna voice agent | Agent prompt and extraction design in `docs/bolna-agent-prompt.md` |
 | Webhook/API usage | Backend starts Bolna calls and receives post-call webhooks |
 | Web app around agent | React dashboard for intake, call launch, queue, and work order output |
 | SaaS/product layer | Operations brief, urgency/completion metrics, call intelligence, routing guidance |
-| Full flow demo | User -> Web app -> Bolna agent -> Backend logic -> Work order |
-| Submission assets | Deck outline, demo script, checklist, deployed link |
+| Full workflow | User -> Web app -> Bolna agent -> Backend logic -> Work order |
 
 ## Enterprise Use Case
 
@@ -78,7 +77,6 @@ Reduce time from raw service request to qualified work order from about 45 minut
 | `POST /api/cases` | Creates a new service case |
 | `POST /api/cases/:id/call` | Starts a Bolna outbound call |
 | `POST /api/bolna/webhook` | Receives Bolna call execution data |
-| `POST /api/demo/webhook/:id` | Local/demo fallback for testing backend output |
 
 ## Bolna Agent Setup
 
@@ -170,13 +168,7 @@ vercel --prod
 5. Answer the call and complete the triage conversation.
 6. After Bolna posts to the webhook, review the generated work order in the dashboard.
 
-For local fallback testing only, open the app with:
-
-```text
-http://localhost:5173?demo=1
-```
-
-## Submission Files
+## Project Docs
 
 - `docs/use-case.md` - problem, workflow, and outcome metric
 - `docs/bolna-agent-prompt.md` - Bolna prompt and extraction fields
@@ -185,9 +177,3 @@ http://localhost:5173?demo=1
 - `docs/video-pitch.md` - concise narration for the screen recording
 - `docs/live-bolna-checklist.md` - real outbound call verification steps
 - `docs/submission-checklist.md` - final upload checklist
-
-## Notes
-
-- Do not commit `.env`; it is ignored by git.
-- Bolna trial accounts may only allow outbound calls to verified phone numbers.
-- The live production UI hides demo-only controls so the evaluator sees the real Bolna workflow.

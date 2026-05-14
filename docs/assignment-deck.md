@@ -4,7 +4,7 @@
 
 FieldFlow Voice Triage
 
-AI voice-assisted enterprise service qualification using Bolna.
+Bolna-powered enterprise service qualification.
 
 ## Slide 2: Problem
 
@@ -69,7 +69,6 @@ Backend handles:
 - `POST /api/cases`
 - `POST /api/cases/:id/call`
 - `POST /api/bolna/webhook`
-- `POST /api/demo/webhook/:id`
 
 Urgency score combines issue text, transcript, extracted impact, preferred window, and asset type.
 
@@ -90,7 +89,7 @@ Expected impact:
 
 ## Slide 8: Standout SaaS Layer
 
-FieldFlow is not only a call demo. It behaves like a small operations console:
+FieldFlow goes beyond call initiation. It behaves like a small operations console:
 
 - Queue health and completion rate.
 - Urgency scoring visibility.
