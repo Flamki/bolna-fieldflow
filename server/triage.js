@@ -124,7 +124,9 @@ export function makeDemoExecution(serviceCase) {
     extracted: {
       issue_summary: `${serviceCase.assetType} needs same-day inspection because the issue may breach the enterprise SLA.`,
       impact: "Potential inventory loss and customer SLA breach.",
+      urgency_reason: "Temperature fluctuation creates inventory risk within the same service window.",
       customer_availability: serviceCase.preferredWindow,
+      site_access: "Technician access approved at the security gate.",
       technician_skill: "Refrigeration technician",
       next_action: "Create urgent work order, notify dispatcher, and send ETA confirmation to the customer.",
       parts_likely_needed: "Temperature probe, refrigerant gauge, compressor relay"

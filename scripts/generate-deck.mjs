@@ -359,8 +359,8 @@ function slideBase(bg = colors.paper) {
   const cols = [
     ["1. New request", "Capture enterprise, contact, phone, asset, issue, and preferred window."],
     ["2. Triage queue", "Track new, calling, and work-order-ready states."],
-    ["3. Detail + action", "Start Bolna call or demo-safe webhook flow."],
-    ["4. Output", "Show priority, SLA, technician skill, likely parts, decision, and timeline."]
+    ["3. Call evidence", "Show transcript, extracted impact, site access, and webhook status."],
+    ["4. Output", "Show priority, SLA, technician routing, likely parts, decision, and timeline."]
   ];
   cols.forEach(([head, body], i) => {
     const x = 0.68 + (i % 2) * 6.05;
@@ -442,6 +442,44 @@ function slideBase(bg = colors.paper) {
 
 {
   const slide = slideBase();
+  title(slide, "Standout SaaS layer");
+  slide.addText("The assignment flow is packaged as an enterprise operations console, not a one-off call demo.", {
+    x: 0.58,
+    y: 1.18,
+    w: 8.8,
+    h: 0.42,
+    fontSize: 16,
+    color: colors.muted,
+    margin: 0,
+    fit: "shrink"
+  });
+  [
+    ["Operations brief", "Queue health, urgency average, completion rate, and live webhook state."],
+    ["Call intelligence", "Transcript plus extracted impact, urgency reason, access, availability, and parts signal."],
+    ["Routing guidance", "Technician skill, SLA, assignment rule, and backend next action."],
+    ["Audit trail", "Timestamped request, call, webhook, and work-order events."]
+  ].forEach(([head, body], i) => {
+    const x = 0.72 + (i % 2) * 6.05;
+    const y = 2.12 + Math.floor(i / 2) * 1.55;
+    slide.addText(head, { x, y, w: 3.4, h: 0.26, fontSize: 15, bold: true, color: colors.green, margin: 0, fit: "shrink" });
+    slide.addText(body, { x, y: y + 0.42, w: 4.85, h: 0.42, fontSize: 12.3, color: colors.dark, margin: 0, fit: "shrink" });
+  });
+  slide.addText("This keeps scope tight while showing product, frontend, backend, and AI workflow judgment.", {
+    x: 0.72,
+    y: 5.85,
+    w: 9.6,
+    h: 0.34,
+    fontSize: 13,
+    bold: true,
+    color: colors.dark,
+    margin: 0,
+    fit: "shrink"
+  });
+  addFooter(slide, 8);
+}
+
+{
+  const slide = slideBase();
   title(slide, "Demo flow and links");
   addStage(slide, 1, "Create case", "Dispatcher enters request", 0.72, 1.85, colors.white);
   addStage(slide, 2, "Start call", "Bolna receives context", 3.77, 1.85, colors.white);
@@ -464,7 +502,7 @@ function slideBase(bg = colors.paper) {
     margin: 0,
     fit: "shrink"
   });
-  addFooter(slide, 8);
+  addFooter(slide, 9);
 }
 
 await pptx.writeFile({ fileName: "docs/FieldFlow-Voice-Triage-Ayush.pptx" });

@@ -25,6 +25,7 @@ https://bolna-one.vercel.app/api/bolna/webhook
 | Bolna Voice AI agent | Agent prompt and extraction design in `docs/bolna-agent-prompt.md` |
 | Webhook/API usage | Backend starts Bolna calls and receives post-call webhooks |
 | Web app around agent | React dashboard for intake, call launch, queue, and work order output |
+| SaaS/product layer | Operations brief, urgency/completion metrics, call intelligence, routing guidance |
 | Full flow demo | User -> Web app -> Bolna agent -> Backend logic -> Work order |
 | Submission assets | Deck outline, demo script, checklist, deployed link |
 
@@ -33,6 +34,8 @@ https://bolna-one.vercel.app/api/bolna/webhook
 Enterprise facilities teams often receive service requests with incomplete details. Dispatchers must call customers manually, collect missing information, judge urgency, and create work orders. This delays dispatch and increases the chance of SLA breaches or wrong technician assignment.
 
 FieldFlow solves this by using a Bolna voice agent to qualify the request and a backend workflow to generate a structured work order.
+
+The product is positioned as a lightweight enterprise SaaS operations console: dispatchers can see queue health, SLA exposure, call evidence, technician routing, and the generated work order in one place.
 
 Primary outcome metric:
 
@@ -54,7 +57,7 @@ Reduce time from raw service request to qualified work order from about 45 minut
    - Likely parts
    - Next backend action
    - Call transcript/recording when available
-7. Dashboard displays the work order and timeline.
+7. Dashboard displays the work order, call evidence, routing guidance, and timeline.
 
 ## Tech Stack
 

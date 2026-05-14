@@ -2,16 +2,26 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Activity,
+  BarChart3,
+  Building2,
   ClipboardCheck,
+  Database,
+  FileAudio,
+  Gauge,
   Headphones,
   Loader2,
+  MapPin,
+  Network,
   PhoneCall,
   Plus,
   Radio,
   RefreshCcw,
   Route,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  TimerReset,
+  UserCheck,
+  Wrench
 } from "lucide-react";
 import "./styles.css";
 
@@ -32,6 +42,10 @@ function App() {
   const [health, setHealth] = useState(null);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
+  const forceDemoMode = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("demo") === "1";
+  }, []);
 
   const selected = useMemo(
     () => cases.find((item) => item.id === selectedId) || cases[0],
@@ -41,16 +55,16 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     return !health?.bolnaConfigured || params.get("demo") === "1";
   }, [health?.bolnaConfigured]);
-  const forceDemoMode = useMemo(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("demo") === "1";
-  }, []);
 
   const metrics = useMemo(() => {
     const ready = cases.filter((item) => item.status === "work_order_ready").length;
     const critical = cases.filter((item) => item.priority?.startsWith("P1")).length;
     const calling = cases.filter((item) => item.status === "calling").length;
-    return { ready, critical, calling };
+    const completionRate = cases.length ? Math.round((ready / cases.length) * 100) : 0;
+    const avgScore = cases.length
+      ? Math.round(cases.reduce((sum, item) => sum + (item.workOrder?.score || 0), 0) / cases.length)
+      : 0;
+    return { ready, critical, calling, completionRate, avgScore };
   }, [cases]);
 
   async function load() {
@@ -129,7 +143,7 @@ function App() {
         </div>
         <div className={`config-pill ${health?.bolnaConfigured ? "live" : ""}`}>
           <Radio size={16} />
-          {health?.bolnaConfigured ? "Bolna live mode" : "Demo mode"}
+          {forceDemoMode ? "Demo-safe flow" : health?.bolnaConfigured ? "Bolna live mode" : "Demo mode"}
         </div>
       </section>
 
@@ -141,6 +155,8 @@ function App() {
         <Metric icon={Headphones} label="Calls in progress" value={metrics.calling} />
         <Metric icon={Route} label="Outcome metric" value="35 min" helper="Target time saved per ticket" />
       </section>
+
+      <OperationsBrief metrics={metrics} cases={cases} selected={selected} health={health} />
 
       <section className="workspace">
         <aside className="panel intake-panel">
@@ -236,7 +252,12 @@ function App() {
                 )}
               </div>
 
-              {selected.workOrder && <WorkOrder order={selected.workOrder} recordingUrl={selected.recordingUrl} />}
+              {selected.workOrder && (
+                <>
+                  <WorkOrder order={selected.workOrder} recordingUrl={selected.recordingUrl} />
+                  <CallIntelligence serviceCase={selected} />
+                </>
+              )}
 
               <div className="timeline">
                 <h3>Workflow timeline</h3>
@@ -277,6 +298,43 @@ function Metric({ icon: Icon, label, value, helper }) {
         {helper && <small>{helper}</small>}
       </div>
     </article>
+  );
+}
+
+function OperationsBrief({ metrics, cases, selected, health }) {
+  const openCases = cases.length - metrics.ready;
+  const siteCount = new Set(cases.map((item) => item.address).filter(Boolean)).size;
+  return (
+    <section className="ops-brief" aria-label="Operations brief">
+      <div className="brief-copy">
+        <p className="eyebrow">Enterprise SaaS layer</p>
+        <h2>Voice-qualified dispatch workspace</h2>
+        <p>
+          FieldFlow turns every incomplete request into a scored work order with call evidence, SLA urgency,
+          and routing guidance for the dispatcher.
+        </p>
+      </div>
+      <div className="brief-grid">
+        <BriefItem icon={Building2} label="Active sites" value={siteCount || 1} />
+        <BriefItem icon={Gauge} label="Avg urgency" value={metrics.avgScore || "--"} />
+        <BriefItem icon={BarChart3} label="Completion" value={`${metrics.completionRate}%`} />
+        <BriefItem icon={Database} label="Webhook" value={health?.bolnaConfigured ? "Live" : "Demo"} />
+      </div>
+      <div className="brief-decision">
+        <span>{openCases ? `${openCases} case${openCases === 1 ? "" : "s"} still need triage` : "Queue fully qualified"}</span>
+        <strong>{selected?.workOrder?.nextAction || "Start a Bolna call to generate routing guidance."}</strong>
+      </div>
+    </section>
+  );
+}
+
+function BriefItem({ icon: Icon, label, value }) {
+  return (
+    <div className="brief-item">
+      <Icon size={17} />
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
   );
 }
 
@@ -324,10 +382,68 @@ function WorkOrder({ order, recordingUrl }) {
         <strong>Backend decision</strong>
         <span>{order.nextAction}</span>
       </div>
+      <div className="routing-grid">
+        <RoutingItem icon={Wrench} label="Dispatch team" value={order.technicianSkill} />
+        <RoutingItem icon={TimerReset} label="Customer window" value={order.customerAvailability} />
+        <RoutingItem icon={UserCheck} label="Assignment rule" value={order.priority === "P1 Critical" ? "Duty manager approval" : "Dispatcher queue"} />
+      </div>
       {recordingUrl && !recordingUrl.includes("example.com") && (
         <a className="recording-link" href={recordingUrl} target="_blank" rel="noreferrer">
           Open call recording
         </a>
+      )}
+    </section>
+  );
+}
+
+function RoutingItem({ icon: Icon, label, value }) {
+  return (
+    <div className="routing-item">
+      <Icon size={16} />
+      <span>{label}</span>
+      <strong>{value || "Pending"}</strong>
+    </div>
+  );
+}
+
+function CallIntelligence({ serviceCase }) {
+  const extracted = serviceCase.extractedData || {};
+  const evidence = [
+    ["Impact", extracted.impact],
+    ["Urgency reason", extracted.urgency_reason],
+    ["Site access", extracted.site_access],
+    ["Availability", extracted.customer_availability],
+    ["Parts signal", extracted.parts_likely_needed]
+  ].filter(([, value]) => value);
+
+  return (
+    <section className="call-intelligence">
+      <div className="work-order-header">
+        <div>
+          <p className="eyebrow">Call intelligence</p>
+          <h3>Evidence behind the work order</h3>
+        </div>
+        <Network size={18} />
+      </div>
+      {evidence.length > 0 && (
+        <div className="evidence-grid">
+          {evidence.map(([label, value]) => (
+            <Info key={label} label={label} value={value} />
+          ))}
+        </div>
+      )}
+      <div className="transcript-box">
+        <div>
+          <FileAudio size={16} />
+          <strong>Transcript</strong>
+        </div>
+        <p>{serviceCase.transcript || "Transcript will appear after Bolna posts the call execution webhook."}</p>
+      </div>
+      {serviceCase.address && (
+        <div className="site-note">
+          <MapPin size={16} />
+          <span>{serviceCase.address}</span>
+        </div>
       )}
     </section>
   );

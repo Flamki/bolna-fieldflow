@@ -57,6 +57,9 @@ The app is an operator dashboard with:
 - Bolna call action.
 - Webhook endpoint visibility.
 - Work order output.
+- Operations metrics.
+- Call intelligence evidence.
+- Technician routing guidance.
 - Timeline audit trail.
 
 ## Slide 6: Backend Logic
@@ -85,7 +88,17 @@ Expected impact:
 - More complete triage data.
 - Improved first-time-right technician assignment.
 
-## Slide 8: Demo
+## Slide 8: Standout SaaS Layer
+
+FieldFlow is not only a call demo. It behaves like a small operations console:
+
+- Queue health and completion rate.
+- Urgency scoring visibility.
+- Call transcript and extracted evidence.
+- Routing recommendation for technician skill and SLA.
+- Timeline audit trail for dispatcher trust.
+
+## Slide 9: Demo
 
 Demo path:
 

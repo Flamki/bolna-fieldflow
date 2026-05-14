@@ -53,6 +53,9 @@ Point to:
 - Technician skill.
 - Parts likely needed.
 - Backend decision.
+- Operations brief metrics.
+- Call intelligence evidence.
+- Transcript and site access notes.
 - Timeline.
 - Webhook endpoint.
 
