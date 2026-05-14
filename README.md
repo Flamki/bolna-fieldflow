@@ -2,9 +2,9 @@
 
 FieldFlow is a full-stack Bolna voice workflow built for enterprise field-service triage. A dispatcher creates a service request, the web app starts a Bolna call, Bolna sends the call result to a backend webhook, and the backend generates a prioritized technician-ready work order.
 
-## Live Demo
+## Production App
 
-Deployed app:
+App URL:
 
 ```text
 https://bolna-one.vercel.app
@@ -159,11 +159,11 @@ Deploy:
 vercel --prod
 ```
 
-## Demo Instructions
+## Run The Workflow
 
 1. Open `https://bolna-one.vercel.app`.
 2. Create a new service case.
-3. Use a Bolna-verified phone number.
+3. Enter the customer phone number.
 4. Click **Start Bolna call**.
 5. Answer the call and complete the triage conversation.
 6. After Bolna posts to the webhook, review the generated work order in the dashboard.
@@ -172,8 +172,3 @@ vercel --prod
 
 - `docs/use-case.md` - problem, workflow, and outcome metric
 - `docs/bolna-agent-prompt.md` - Bolna prompt and extraction fields
-- `docs/assignment-deck.md` - slide content for submission deck
-- `docs/demo-script.md` - screen recording script
-- `docs/video-pitch.md` - concise narration for the screen recording
-- `docs/live-bolna-checklist.md` - real outbound call verification steps
-- `docs/submission-checklist.md` - final upload checklist
