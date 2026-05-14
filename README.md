@@ -182,6 +182,8 @@ http://localhost:5173?demo=1
 - `docs/bolna-agent-prompt.md` - Bolna prompt and extraction fields
 - `docs/assignment-deck.md` - slide content for submission deck
 - `docs/demo-script.md` - screen recording script
+- `docs/video-pitch.md` - concise narration for the screen recording
+- `docs/live-bolna-checklist.md` - real outbound call verification steps
 - `docs/submission-checklist.md` - final upload checklist
 
 ## Notes

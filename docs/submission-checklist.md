@@ -24,6 +24,8 @@ Before recording:
 - Open `http://localhost:5173`.
 - For safe demo mode, open `http://localhost:5173?demo=1`.
 - Confirm dashboard loads.
+- Review `docs/video-pitch.md`.
+- For a real outbound call, review `docs/live-bolna-checklist.md`.
 - Create at least one case.
 - Click **Start Bolna call**.
 - Click **Simulate webhook**.
