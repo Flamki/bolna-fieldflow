@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.playwright-mcp/
+server/data/*.json
+!.gitkeep
+npm-debug.log*
+submission/
+
+.vercel
