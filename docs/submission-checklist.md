@@ -11,8 +11,8 @@ Upload:
 - Assignment deck: `docs/FieldFlow-Voice-Triage-Ayush.pptx`.
 - Screen recording following `docs/demo-script.md`.
 - Call recording from Bolna, or demo recording if Bolna calling is not available.
-- GitHub repository link.
-- Deployed link if available.
+- GitHub repository link: https://github.com/Flamki/bolna-fieldflow
+- Deployed link: https://bolna-one.vercel.app
 
 Submit form:
 
