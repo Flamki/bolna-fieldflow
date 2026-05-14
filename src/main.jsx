@@ -67,10 +67,31 @@ function App() {
     return { ready, critical, calling, completionRate, avgScore };
   }, [cases]);
 
+  async function syncCallingCases(nextCases) {
+    const liveCallingCases = nextCases.filter((item) => item.status === "calling" && item.callProvider === "bolna" && item.executionId);
+    if (!liveCallingCases.length) return nextCases;
+
+    const synced = await Promise.all(
+      liveCallingCases.map(async (item) => {
+        try {
+          const response = await fetch(`/api/cases/${item.id}/sync`, { method: "POST" });
+          if (!response.ok) return item;
+          const body = await response.json();
+          return body.case || item;
+        } catch {
+          return item;
+        }
+      })
+    );
+
+    const byId = new Map(synced.map((item) => [item.id, item]));
+    return nextCases.map((item) => byId.get(item.id) || item);
+  }
+
   async function load() {
     setError("");
     const [casesResponse, healthResponse] = await Promise.all([fetch("/api/cases"), fetch("/api/health")]);
-    const nextCases = await casesResponse.json();
+    const nextCases = await syncCallingCases(await casesResponse.json());
     setCases(nextCases);
     setHealth(await healthResponse.json());
     if (!selectedId && nextCases[0]) setSelectedId(nextCases[0].id);
@@ -79,6 +100,14 @@ function App() {
   useEffect(() => {
     load().catch((err) => setError(err.message));
   }, []);
+
+  useEffect(() => {
+    if (!metrics.calling) return undefined;
+    const timer = window.setInterval(() => {
+      load().catch((err) => setError(err.message));
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [metrics.calling]);
 
   async function createCase(event) {
     event.preventDefault();
@@ -152,7 +181,7 @@ function App() {
       <section className="metric-grid" aria-label="Workflow metrics">
         <Metric icon={ClipboardCheck} label="Work orders ready" value={metrics.ready} />
         <Metric icon={ShieldCheck} label="Critical cases" value={metrics.critical} />
-        <Metric icon={Headphones} label="Calls in progress" value={metrics.calling} />
+        <Metric icon={Headphones} label="Awaiting call result" value={metrics.calling} helper="Auto-syncs with Bolna" />
         <Metric icon={Route} label="Outcome metric" value="35 min" helper="Target time saved per ticket" />
       </section>
 

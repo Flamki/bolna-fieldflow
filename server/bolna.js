@@ -1,4 +1,5 @@
 const BOLNA_CALL_URL = "https://api.bolna.ai/call";
+const BOLNA_EXECUTION_URL = "https://api.bolna.ai/executions";
 
 export function hasBolnaConfig() {
   return Boolean(process.env.BOLNA_API_KEY && process.env.BOLNA_AGENT_ID);
@@ -55,4 +56,29 @@ export async function startBolnaCall(serviceCase) {
   }
 
   return { provider: "bolna", ...body };
+}
+
+export async function getBolnaExecution(executionId) {
+  if (!hasBolnaConfig()) {
+    const error = new Error("Bolna credentials are not configured");
+    error.status = 400;
+    throw error;
+  }
+
+  const response = await fetch(`${BOLNA_EXECUTION_URL}/${executionId}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.BOLNA_API_KEY}`
+    }
+  });
+
+  const body = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(body?.message || "Bolna execution lookup failed");
+    error.status = response.status;
+    error.details = body;
+    throw error;
+  }
+
+  return body;
 }

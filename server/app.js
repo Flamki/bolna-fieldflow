@@ -2,8 +2,34 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { addCase, findCaseByExecution, readCases, updateCase } from "./store.js";
-import { startBolnaCall, startDemoCall, hasBolnaConfig } from "./bolna.js";
+import { startBolnaCall, startDemoCall, getBolnaExecution, hasBolnaConfig } from "./bolna.js";
 import { buildWorkOrder, extractBolnaExecution, makeDemoExecution } from "./triage.js";
+
+const completedStatuses = /completed|ended|success|failed|busy|no-answer|call-disconnected|canceled|stopped|error/i;
+
+async function applyExecutionToCase(serviceCase, execution, labelPrefix = "Webhook") {
+  const isComplete = completedStatuses.test(execution.status);
+  const workOrder = isComplete ? buildWorkOrder(serviceCase, execution) : serviceCase.workOrder;
+  const now = new Date().toISOString();
+
+  return updateCase(serviceCase.id, (current) => ({
+    status: isComplete ? "work_order_ready" : "calling",
+    priority: workOrder?.priority || current.priority,
+    lastCallStatus: execution.status,
+    transcript: execution.transcript || current.transcript,
+    recordingUrl: execution.recordingUrl || current.recordingUrl,
+    extractedData: execution.extracted || current.extractedData,
+    workOrder,
+    timeline: [
+      {
+        at: now,
+        label: isComplete ? `${labelPrefix} processed and work order generated` : `${labelPrefix} status update received`,
+        detail: isComplete ? `${workOrder.priority} with SLA: ${workOrder.sla}.` : `Call status is ${execution.status}.`
+      },
+      ...current.timeline
+    ]
+  }));
+}
 
 export function createApp() {
   const app = express();
@@ -69,6 +95,24 @@ export function createApp() {
     }
   });
 
+  app.post("/api/cases/:id/sync", async (req, res, next) => {
+    try {
+      const cases = await readCases();
+      const serviceCase = cases.find((item) => item.id === req.params.id);
+      if (!serviceCase) return res.status(404).json({ message: "Case not found" });
+      if (!serviceCase.executionId) return res.status(400).json({ message: "Case has no Bolna execution ID yet" });
+      if (serviceCase.callProvider !== "bolna") return res.json({ case: serviceCase, synced: false });
+
+      const rawExecution = await getBolnaExecution(serviceCase.executionId);
+      const execution = extractBolnaExecution(rawExecution);
+      const updated = await applyExecutionToCase(serviceCase, execution, "Bolna execution");
+
+      res.json({ case: updated, synced: true, status: execution.status });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/bolna/webhook", async (req, res, next) => {
     try {
       const execution = extractBolnaExecution(req.body);
@@ -76,27 +120,7 @@ export function createApp() {
       if (!serviceCase && execution.executionId) serviceCase = await findCaseByExecution(execution.executionId);
       if (!serviceCase) return res.status(202).json({ message: "Webhook accepted, but no matching case was found" });
 
-      const isComplete = /completed|ended|success|failed|busy|no-answer/i.test(execution.status);
-      const workOrder = isComplete ? buildWorkOrder(serviceCase, execution) : serviceCase.workOrder;
-      const now = new Date().toISOString();
-
-      const updated = await updateCase(serviceCase.id, (current) => ({
-        status: isComplete ? "work_order_ready" : "calling",
-        priority: workOrder?.priority || current.priority,
-        lastCallStatus: execution.status,
-        transcript: execution.transcript || current.transcript,
-        recordingUrl: execution.recordingUrl || current.recordingUrl,
-        extractedData: execution.extracted || current.extractedData,
-        workOrder,
-        timeline: [
-          {
-            at: now,
-            label: isComplete ? "Webhook processed and work order generated" : "Webhook status update received",
-            detail: isComplete ? `${workOrder.priority} with SLA: ${workOrder.sla}.` : `Call status is ${execution.status}.`
-          },
-          ...current.timeline
-        ]
-      }));
+      const updated = await applyExecutionToCase(serviceCase, execution);
 
       res.json({ ok: true, case: updated });
     } catch (error) {
